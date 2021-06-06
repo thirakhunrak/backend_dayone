@@ -30,7 +30,7 @@ router.get("/todos/:_id", async (req, res) => {
         res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)", data: {} });
     } else {
         var ans = await Todo.findOne(req.params);
-        if (ans == null) {
+        if (!ans) {
             res.status(400).json({ error: "Todo not found", data: {} });
         } else {
             res.status(200).json({ success: true, data: ans });

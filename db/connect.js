@@ -1,7 +1,8 @@
 const db = require("mongoose");
-const url = "mongodb+srv://admin:1234@cluster0.gbye8.mongodb.net/internship?retryWrites=true&w=majority";
+const dotenv = require("dotenv");
+dotenv.config();
 
-const connectdb = () => db.connect(url,{ useNewUrlParser: true, useUnifiedTopology: true },(err) =>{
+const connectdb = () => db.connect(process.env.MONGO_URL,{ useNewUrlParser: true, useUnifiedTopology: true },(err) =>{
     if (err)
         console.error(err);
     else
