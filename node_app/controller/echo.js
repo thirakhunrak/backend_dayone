@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/echo_get", (req, res) =>{
-    res.json({"message": "Echo from router..."});
+    res.json({message: "Echo from router..."});
 });
 
 router.get("/echo_qs", (req, res) =>{

@@ -1,20 +1,24 @@
 const mongoose = require('mongoose');
-const {Schema} = require("mongoose");
+const { Schema } = require("mongoose");
 
 const todoSchema = new Schema(
     {
-        order: {type: Number, default: 1},
-        createdAt: {type: Date, default: new Date()},
-        title: {type: String, require: true}
+        order: { type: Number, default: 1 },
+        createdAt: { type: Date, default: new Date() },
+        title: { type: String, require: true }
     },
-    {collection: "todo"} //ชื่อ collection ใน DB
+    { collection: "todo" } //ชื่อ collection ใน DB
 );
 // it's not work now!
-todoSchema.pre('save', async function(next) {
-    var max = await TodoModel.find();
-    number = max.length;
-    this.order = number+1;
+todoSchema.pre('save', async function (next) {
+    var maxTodo = await TodoModel.countDocuments();
+    if (!maxTodo) next();
+
+    maxTodo = await TodoModel.find().sort('-order').limit(1);
+    this.order = maxTodo[0].order + 1;
+
     next();
+
 })
 
 

@@ -27,7 +27,7 @@ router.post("/todos", async (req, res) => {
 
 router.get("/todos/:_id", async (req, res) => {
     if (!isValidObjectId(req.params._id)) {
-        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)" });
+        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)", data: {} });
     } else {
         var ans = await Todo.findOne(req.params);
         if (ans == null) {
@@ -41,27 +41,28 @@ router.get("/todos/:_id", async (req, res) => {
 
 router.put("/todos/:_id", async (req, res) => {
     if (!isValidObjectId(req.params._id)) {
-        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)" });
+        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)", data: {} });
     }
     else if (!isValidTitle(req.body.title)) {
-        res.status(400).json({ error: "Invalid Title" });
+        res.status(400).json({ error: "Invalid Title", data: {} });
     }
     else {
         var ans = await Todo.findByIdAndUpdate(req.params._id, req.body, { new: true });
         if (!ans) {
-            res.json(400).json({ error: "Todo not found" })
+            res.status(400).json({ error: "Todo not found", data: {} });
+        } else {
+            res.json({ success: true, data: ans });
         }
-        res.json({ success: true, data: ans });
     }
 })
 
 router.delete("/todos/:_id", async (req, res) => {
     if (!isValidObjectId(req.params._id)) {
-        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)" });
+        res.status(400).json({ error: "Mongo Cast Error (Invalid ObjectID)", data: {} });
     } else {
         var ans = await Todo.findByIdAndDelete(req.params);
         if (!ans) {
-            res.json({ error: "Todo not found", data: {} });
+            res.status(400).json({ error: "Todo not found", data: {} });
         } else {
             res.json({ success: true, data: ans });
         }
