@@ -9,13 +9,13 @@ const todoSchema = new Schema(
     },
     { collection: "todo" } //ชื่อ collection ใน DB
 );
-// it's not work now!
+
 todoSchema.pre('save', async function (next) {
     var maxTodo = await TodoModel.countDocuments();
     if (!maxTodo) next();
 
     maxTodo = await TodoModel.find().sort('-order').limit(1);
-    this.order = maxTodo[0].order + 1;
+    this.order = maxTodo.order + 1;
 
     next();
 
